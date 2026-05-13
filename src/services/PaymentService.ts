@@ -117,4 +117,11 @@ export class PaymentService {
   static async getPaymentStatus(paymentId: string) {
     return await prisma.payment.findUnique({ where: { id: paymentId } });
   }
+
+  static async getAllPayments() {
+    return await prisma.payment.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 50 // Limit to latest 50 for performance
+    });
+  }
 }

@@ -24,11 +24,16 @@ export class GatewaySimulator {
 
     logger.debug(`Gateway received request: ${amount} ${currency}`);
 
-    if (random < 0.7) {
+    if (random < 0.5) {
       return {
         success: true,
         providerId: `prov_${Math.random().toString(36).substr(2, 9)}`,
         status: 'SUCCESS'
+      };
+    } else if (random < 0.7) {
+      return {
+        success: true,
+        status: 'PENDING'
       };
     } else if (random < 0.85) {
       throw new Error('GATEWAY_TRANSIENT_FAILURE');

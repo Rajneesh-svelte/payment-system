@@ -17,6 +17,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Routes
+app.get('/api/payments', PaymentController.list);
 app.post('/api/payments', PaymentController.initiate);
 app.get('/api/payments/:id', PaymentController.getStatus);
 app.post('/api/webhooks/gateway', WebhookController.handleGatewayCallback);

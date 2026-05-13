@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Send, RefreshCw } from 'lucide-react';
+import { Send, RefreshCw } from 'lucide-react';
 import api from '../utils/api';
 
 interface PaymentFormProps {
@@ -40,7 +40,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
   return (
     <div className="glass-card" style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-        <CreditCard className="text-accent-primary" size={24} style={{ color: 'var(--accent-primary)' }} />
         <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Initiate Payment</h2>
       </div>
 
@@ -93,8 +92,8 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Idempotency Key</label>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={regenerateKey}
               style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.25rem' }}
             >
@@ -123,9 +122,9 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
           </div>
         )}
 
-        <button 
-          type="submit" 
-          className="btn btn-primary" 
+        <button
+          type="submit"
+          className="btn btn-primary"
           disabled={loading}
           style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}
         >

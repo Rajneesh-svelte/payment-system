@@ -9,6 +9,7 @@ export interface Payment {
   status: string;
   idempotencyKey: string;
   createdAt: string;
+  lastError?: string;
 }
 
 const PaymentList: React.FC<{ refreshTrigger: number }> = () => {

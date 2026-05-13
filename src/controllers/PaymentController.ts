@@ -43,4 +43,14 @@ export class PaymentController {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+
+  static async list(req: Request, res: Response) {
+    try {
+      const payments = await PaymentService.getAllPayments();
+      return res.json(payments);
+    } catch (error: any) {
+      logger.error(`Controller Error: ${error.message}`);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
 }
