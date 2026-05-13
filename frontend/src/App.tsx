@@ -68,7 +68,7 @@ function App() {
 
           <div className="glass-card" style={{ padding: '1.5rem', marginTop: '2rem', background: 'rgba(255,255,255,0.02)' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <AlertCircle size={16} /> Debugger Tips
+              <AlertCircle size={16} /> Points
             </h3>
             <ul style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', paddingLeft: '1.25rem', lineHeight: '1.6' }}>
               <li>Initiate a payment to see it appear in real-time.</li>
