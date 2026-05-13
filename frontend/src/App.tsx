@@ -6,7 +6,6 @@ import api from './utils/api';
 import { CheckCircle2, XCircle, Clock, RefreshCw, Copy, Play, AlertCircle, CheckCircle } from 'lucide-react';
 import type { Payment } from './components/PaymentList';
 
-// --- Toast Component ---
 const Toast: React.FC<{ message: string; type: 'success' | 'error'; onClear: () => void }> = ({ message, type, onClear }) => {
   useEffect(() => {
     const timer = setTimeout(onClear, 4000);
@@ -39,7 +38,6 @@ function App() {
     addToast('Payment initiated successfully');
   };
 
-  // Fetch all payments on mount
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -55,41 +53,35 @@ function App() {
   return (
     <div className="app-container">
       <Header />
-
       <div className="toast-container">
         {toasts.map(t => (
           <Toast key={t.id} message={t.message} type={t.type} onClear={() => removeToast(t.id)} />
         ))}
       </div>
-
       <main className="dashboard-grid">
         <section className="animate-fade-in">
           <PaymentForm onPaymentInitiated={handlePaymentInitiated} />
-
           <div className="glass-card" style={{ padding: '1.5rem', marginTop: '2rem', background: 'rgba(255,255,255,0.02)' }}>
             <h3 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <AlertCircle size={16} /> Points
             </h3>
             <ul style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', paddingLeft: '1.25rem', lineHeight: '1.6' }}>
               <li>Initiate a payment to see it appear in real-time.</li>
-              <li>Use the <b>contextual actions</b> in the list to simulate gateway callbacks.</li>
+              <li>Use the contextual actions in the list to simulate gateway callbacks.</li>
               <li>Polling automatically syncs status every 2 seconds.</li>
             </ul>
           </div>
         </section>
-
         <section className="animate-fade-in" style={{ animationDelay: '0.1s' }}>
           <div className="glass-card" style={{ padding: '2rem', height: '100%', display: 'flex', flexDirection: 'column' }}>
             <PaymentListInternal payments={payments} setPayments={setPayments} addToast={addToast} />
           </div>
         </section>
       </main>
-
     </div>
   );
 }
 
-// --- Enhanced Payment List ---
 const PaymentListInternal: React.FC<{
   payments: Payment[],
   setPayments: React.Dispatch<React.SetStateAction<Payment[]>>,
@@ -97,7 +89,6 @@ const PaymentListInternal: React.FC<{
 }> = ({ payments, setPayments, addToast }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-
   const totalPages = Math.ceil(payments.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedPayments = payments.slice(startIndex, startIndex + itemsPerPage);
@@ -105,14 +96,10 @@ const PaymentListInternal: React.FC<{
   useEffect(() => {
     const pollInterval = setInterval(async () => {
       const activePayments = payments.filter(p => p.status === 'PENDING' || p.status === 'PROCESSING');
-
       if (activePayments.length === 0) return;
-
       try {
         const res = await api.get('/payments');
         const updatedPayments = res.data;
-
-        // Check for state changes to trigger "glow" or notifications
         updatedPayments.forEach((newP: Payment) => {
           const oldP = payments.find(p => p.id === newP.id);
           if (oldP && oldP.status !== newP.status) {
@@ -120,13 +107,11 @@ const PaymentListInternal: React.FC<{
             if (newP.status === 'FAILED') addToast(`Payment ${newP.id.substring(0, 8)} Failed`, 'error');
           }
         });
-
         setPayments(updatedPayments);
       } catch (e) {
         console.error('Polling error', e);
       }
     }, 2000);
-
     return () => clearInterval(pollInterval);
   }, [payments, setPayments, addToast]);
 
@@ -156,11 +141,9 @@ const PaymentListInternal: React.FC<{
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-
           <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Recent Activity</h2>
         </div>
       </div>
-
       <div style={{ flex: 1, overflowY: 'auto' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -241,7 +224,6 @@ const PaymentListInternal: React.FC<{
           </tbody>
         </table>
       </div>
-
       {totalPages > 1 && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>

@@ -10,17 +10,12 @@ export enum PaymentStatus {
 }
 
 export class PaymentService {
-  /**
-   * Initiates a payment. 
-   * Handles idempotency: if a payment with the same key exists, returns it.
-   */
   static async initiatePayment(data: {
     amount: number;
     currency: string;
     idempotencyKey: string;
   }) {
     return await prisma.$transaction(async (tx) => {
-      // 1. Check for existing payment with the same idempotency key
       const existing = await tx.payment.findUnique({
         where: { idempotencyKey: data.idempotencyKey }
       });
@@ -30,7 +25,6 @@ export class PaymentService {
         return existing;
       }
 
-      // 2. Create new payment in PENDING state
       const payment = await tx.payment.create({
         data: {
           amount: data.amount,
@@ -45,12 +39,7 @@ export class PaymentService {
     });
   }
 
-  /**
-   * Processes a payment with retry logic.
-   * Uses atomic update to prevent race conditions (Concurrency Control).
-   */
   static async processPayment(paymentId: string) {
-    // Atomically move from PENDING to PROCESSING
     const updateResult = await prisma.payment.updateMany({
       where: { 
         id: paymentId,
@@ -95,14 +84,13 @@ export class PaymentService {
       logger.error(`Attempt ${attempt + 1} failed for payment ${paymentId}: ${error.message}`);
 
       if (attempt < maxRetries && (error.message === 'GATEWAY_TRANSIENT_FAILURE' || error.message === 'GATEWAY_TIMEOUT')) {
-        const delay = baseDelay * Math.pow(2, attempt); // Exponential backoff
+        const delay = baseDelay * Math.pow(2, attempt);
         logger.info(`Retrying payment ${paymentId} in ${delay}ms...`);
         
         await new Promise(resolve => setTimeout(resolve, delay));
         return this.executeGatewayCallWithRetries(paymentId, attempt + 1);
       }
 
-      // Final failure
       return await prisma.payment.update({
         where: { id: paymentId },
         data: {
@@ -121,7 +109,7 @@ export class PaymentService {
   static async getAllPayments() {
     return await prisma.payment.findMany({
       orderBy: { createdAt: 'desc' },
-      take: 50 // Limit to latest 50 for performance
+      take: 50
     });
   }
 }

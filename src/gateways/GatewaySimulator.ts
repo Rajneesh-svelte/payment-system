@@ -8,17 +8,9 @@ export interface GatewayResponse {
 }
 
 export class GatewaySimulator {
-  /**
-   * Simulates a payment gateway call with random outcomes:
-   * - 70% Success
-   * - 15% Transient Failure (Retryable)
-   * - 10% Timeout (Retryable)
-   * - 5% Permanent Failure (Non-retryable)
-   */
   static async processPayment(amount: number, currency: string): Promise<GatewayResponse> {
     const random = Math.random();
     
-    // Simulate network delay (100ms - 2000ms)
     const delay = Math.floor(Math.random() * 1900) + 100;
     await new Promise(resolve => setTimeout(resolve, delay));
 

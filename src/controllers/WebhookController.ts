@@ -20,7 +20,6 @@ export class WebhookController {
           return;
         }
 
-        // If payment is already in a final state, don't update (Idempotency for webhooks)
         if (payment.status === PaymentStatus.SUCCESS || payment.status === PaymentStatus.FAILED) {
           logger.info(`Payment ${paymentId} is already in final state ${payment.status}. Skipping webhook.`);
           return;

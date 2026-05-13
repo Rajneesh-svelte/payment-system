@@ -3,9 +3,9 @@ import { GatewaySimulator, GatewayResponse } from './GatewaySimulator';
 import logger from '../utils/logger';
 
 const options = {
-  timeout: 5000, // If our function takes longer than 5 seconds, trigger a failure
-  errorThresholdPercentage: 50, // When 50% of requests fail, open the circuit
-  resetTimeout: 30000 // After 30 seconds, try again.
+  timeout: 5000,
+  errorThresholdPercentage: 50,
+  resetTimeout: 30000
 };
 
 const breaker = new CircuitBreaker(GatewaySimulator.processPayment, options);

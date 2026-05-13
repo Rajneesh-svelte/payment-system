@@ -17,7 +17,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
       const response = await api.post('/payments', {
         amount: parseFloat(amount),
@@ -25,7 +24,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
         idempotencyKey
       });
       onPaymentInitiated(response.data);
-      // Reset form but keep key fresh for next one or reset it
       setAmount('');
       setIdempotencyKey(crypto.randomUUID());
     } catch (err: any) {
@@ -42,7 +40,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
         <h2 style={{ fontSize: '1.25rem', fontWeight: 600 }}>Initiate Payment</h2>
       </div>
-
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Amount</label>
@@ -65,7 +62,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
             }}
           />
         </div>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Currency</label>
           <select
@@ -88,7 +84,6 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
             <option value="INR">INR - Indian Rupee</option>
           </select>
         </div>
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <label style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Idempotency Key</label>
@@ -115,13 +110,11 @@ const PaymentForm: React.FC<PaymentFormProps> = ({ onPaymentInitiated }) => {
             }}
           />
         </div>
-
         {error && (
           <div style={{ color: 'var(--error)', fontSize: '0.875rem', padding: '0.5rem', borderRadius: '0.5rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
             {error}
           </div>
         )}
-
         <button
           type="submit"
           className="btn btn-primary"
